@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 dotenv.config();
 
 const app = express();
@@ -35,6 +35,32 @@ async function run() {
     app.get('/allpet', async(req , res)=>{
         const result = await petCollection.find().toArray();
         res.send(result)
+    })
+
+    app.get('/allpet/:id', async(req , res)=>{
+        const id = req.params.id;
+        const query ={_id: new ObjectId(id)}
+
+        const result = await petCollection.findOne(query)
+        res.send(result)
+    })
+
+    app.get('/allpet/user/:userId', async(req, res) =>{
+      const userId = req.params.userId;
+      const query = {userId: userId}
+
+      const result = await petCollection.find(query).toArray();
+      res.json(result);
+    })
+
+    app.delete('/allpet/:id', async(req, res) =>{
+       const id = req.params.id;
+       const query = {
+        _id: new ObjectId(id)
+       }
+
+       const result = await petCollection.deleteOne(query);
+       res.send(result);
     })
 
     await client.db("admin").command({ ping: 1 });
