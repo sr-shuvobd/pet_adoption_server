@@ -26,6 +26,7 @@ async function run() {
 
     const db = client.db("petadopt");
     const petCollection = db.collection("allpet");
+    const petAdopt = db.collection("adoptpet")
 
     app.post('/allpet',async (req, res) =>{
       const petData = req.body;
@@ -63,7 +64,7 @@ async function run() {
        res.send(result);
     })
 
-    app.patch('allpet/:id', async(req , res) =>{
+    app.patch('/allpet/:id', async(req , res) =>{
       const id = req.params.id;
       const updatedPet = req.body;
 
@@ -72,6 +73,12 @@ async function run() {
       {$set: updatedPet}
       )
       res.send(result)
+    })
+
+    app.post('/adoptpet',async (req, res) =>{
+      const petData = req.body;
+      const result = await petAdopt.insertOne(petData);
+      res.json(result)
     })
 
     await client.db("admin").command({ ping: 1 });
