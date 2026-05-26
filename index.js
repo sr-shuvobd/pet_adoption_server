@@ -33,6 +33,7 @@ async function run() {
       const result = await petCollection.insertOne(petData);
       res.json(result);
     });
+    
     app.get("/allpet", async (req, res) => {
       const result = await petCollection.find().toArray();
       res.send(result);
